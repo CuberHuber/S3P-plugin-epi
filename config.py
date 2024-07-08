@@ -16,15 +16,15 @@ from s3p_sdk.module import (
 
 config = PluginConfig(
     plugin=CoreConfig(
-        reference='uniq source name',
+        reference='epi',
         type=SOURCE,
-        files=['payload_parser.py', ],
+        files=['epi.py', ],
         is_localstorage=False
     ),
     task=TaskConfig(
         trigger=trigger.TriggerConfig(
             type=trigger.SCHEDULE,
-            interval=datetime.timedelta(days=7),
+            interval=datetime.timedelta(days=30),
         )
     ),
     middleware=MiddlewareConfig(
@@ -36,15 +36,16 @@ config = PluginConfig(
         bus=None,
     ),
     payload=payload.PayloadConfig(
-        file='payload_parser.py',
-        classname='MyParser',
+        file='epi.py',
+        classname='EPIParser',
         entry=payload.entry.EntryConfig(
             method='content',
             params=[
                 payload.entry.ModuleParamConfig(key='driver', module_name=WEBDRIVER, bus=True),
                 payload.entry.ConstParamConfig(key='max_count_documents', value=50),
                 payload.entry.ConstParamConfig(key='url',
-                                               value='url to the source page'),
+                                               value='https://www.epicompany.eu/news'),
+                payload.entry.ConstParamConfig(key='max_driver_wait', value=20),
             ]
         )
     )

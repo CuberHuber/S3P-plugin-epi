@@ -9,19 +9,20 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
 
-class MyParser(S3PParserBase):
+class EPIParser(S3PParserBase):
     """
     Парсер, использующий базовый класс парсера S3P
     """
 
-    def __init__(self, refer: S3PRefer, web_driver: WebDriver, url: str, max_count_documents: int = None,
+    def __init__(self, refer: S3PRefer, driver: WebDriver, url: str, max_driver_wait: int = 20, max_count_documents: int = None,
                  last_document: S3PDocument = None):
         super().__init__(refer, max_count_documents, last_document)
 
         # Тут должны быть инициализированы свойства, характерные для этого парсера. Например: WebDriver
         self.URL = url
-        self._driver = web_driver
-        self._wait = WebDriverWait(self._driver, timeout=20)
+        self._driver = driver
+        self.max_driver_wait = max_driver_wait
+        self._wait = WebDriverWait(self._driver, timeout=self.max_driver_wait)
 
     def _parse(self) -> None:
         # HOST - это главная ссылка на источник, по которому будет "бегать" парсер
